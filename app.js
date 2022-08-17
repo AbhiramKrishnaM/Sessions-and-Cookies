@@ -12,6 +12,14 @@ const cors = require("cors");
 
 const app = express();
 
+mongoose.connect("mongodb://localhost:27017/session", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
