@@ -1,43 +1,35 @@
 require("dotenv").config();
+
+const auth = require("./routes/auth.js");
+const switcher = require("./routes/switcher.js");
+const AuthenticationMiddleware = require("./AuthenticationMiddleware");
+
 const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 
-const session = require("express-session");
-
-const MongoDBSession = require("connect-mongodb-session")(session);
+const cors = require("cors");
 
 const app = express();
 
-// connecting mongo db
-const mongoose = require("mongoose");
-mongoose.connect(process.env.DATABASE_URL);
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-const db = mongoose.connection;
-
-db.on("error", (error) => console.error(error));
-
-db.once("open", () => console.log("Connected to database"));
-
-//
-
-const store = new MongoDBSession({
-  uri: process.env.DATABASE_URL,
-  collection: "mySession",
-});
+const session = require("express-session");
 
 app.use(
   session({
-    secret: " Key that will sign the cookie ",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: store,
   })
 );
 
-app.get("/user", (req, res) => {
-  req.session.isAuth = true;
-  res.send("Hello");
-});
+app.use("/auth", auth);
 
-app.listen(5000, () => {
-  console.log("Server runnign at local host 5000");
+app.use("/api", AuthenticationMiddleware, switcher);
+
+app.listen(process.env.PORT, () => {
+  console.log("Server runnign at http://localhost:5000");
 });
