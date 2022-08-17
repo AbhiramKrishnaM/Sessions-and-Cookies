@@ -10,7 +10,7 @@ router.post("/login", async (req, res) => {
   try {
     // call the url
     const response = await axios.post(
-      process.env.BASE_MMIP_URL + "/admin-login",
+      process.env.BASE_MMIP_URL + "/api/admin-login",
       form
     );
 
