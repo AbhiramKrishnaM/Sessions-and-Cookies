@@ -10,7 +10,7 @@ router.post("/login", async (req, res) => {
   try {
     // call the url
     const response = await axios.post(
-      "https://qc.mmp.iocod.com/api/admin-login",
+      process.env.BASE_MMIP_URL + "/admin-login",
       form
     );
 
@@ -18,13 +18,22 @@ router.post("/login", async (req, res) => {
       if (!req.session.user) {
         req.session.user = response.data.data;
 
-        res.status(200).json("Authenticated");
+        res.status(200).json({ msg: "Authenticated" });
       } else {
         res.status(401).json("Already a user");
       }
     }
   } catch (err) {
     res.status(401).send("Bad credentials");
+  }
+});
+
+router.post("/logout", (req, res) => {
+  if (req.session.user) {
+    req.session.destroy();
+    res.status(200).json({ msg: "Logged out" });
+  } else {
+    res.status(403).json({ msg: "Not logged in" });
   }
 });
 
