@@ -5,7 +5,8 @@ async function _getData(_url, _apiToken) {
     const _response = await axios.get(`${process.env.BASE_MMIP_URL}${_url}`, {
       headers: { Authorization: `Bearer ${_apiToken}` },
     });
-    if (_response.status === 200) return _response.data;
+
+    if (_response.status === 200) return _response;
   } catch (error) {
     return error;
   }
@@ -20,7 +21,8 @@ async function _postData(_url, _apiToken, _data) {
         headers: { Authorization: `Bearer ${_apiToken}` },
       }
     );
-    if (_response.status === 200) return _response;
+
+    if (_response.status === 200) return _response.data;
   } catch (error) {
     return error;
   }
