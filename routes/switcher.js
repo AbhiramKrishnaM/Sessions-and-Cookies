@@ -11,7 +11,7 @@ router.get("/*", async (req, res) => {
   //   switch
   switch (_lastUrl) {
     case "/api/get-user-details":
-      const response = await _getData(_lastUrl, _apiToken);
+      const response = await _postData(_lastUrl, _apiToken, {});
       res.status(200).json(response);
       break;
     case y:
