@@ -5,31 +5,33 @@ const switcher = require("./routes/switcher.js");
 const AuthenticationMiddleware = require("./AuthenticationMiddleware");
 
 const express = require("express");
-const mongoose = require("mongoose");
+
 const bodyParser = require("body-parser");
 
 const cors = require("cors");
 
 const app = express();
 
-mongoose.connect("mongodb://localhost:27017/session", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const session = require("express-session");
+var MongoDBStore = require("connect-mongodb-session")(session);
+
+var store = new MongoDBStore({
+  uri: "mongodb://localhost:27017/session",
+  collection: "mySessions",
+});
 
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
-    resave: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    },
+    store: store,
+    resave: true,
     saveUninitialized: false,
   })
 );

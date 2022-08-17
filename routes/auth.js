@@ -2,8 +2,6 @@ const axios = require("axios");
 
 const express = require("express");
 
-const users = require("../user.js");
-
 let router = express.Router();
 
 router.post("/login", async (req, res) => {
@@ -17,14 +15,13 @@ router.post("/login", async (req, res) => {
     );
 
     if (response.status === 200) {
-      // save the api_token to database
+      if (!req.session.user) {
+        req.session.user = response.data.data;
 
-      if (req.session.user) {
-        res.send("You are already logged in");
+        res.status(200).json("Authenticated");
       } else {
-        req.session.user = { email: req.body.email };
+        res.status(401).json("Already a user");
       }
-      res.status(200).json("Authenticated");
     }
   } catch (err) {
     res.status(401).send("Bad credentials");

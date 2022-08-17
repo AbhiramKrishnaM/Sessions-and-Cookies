@@ -1,10 +1,10 @@
 const express = require("express");
 
-const user = require("../user.js");
-
 const router = express.Router();
 
-router.get("/*", (req, res) => {});
+router.get("/*", (req, res) => {
+  res.status(200).send("Hello");
+});
 
 router.post("/*", (req, res) => {});
 
