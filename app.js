@@ -41,5 +41,5 @@ app.use("/auth", auth);
 app.use("/api", AuthenticationMiddleware, switcher);
 
 app.listen(process.env.PORT, () => {
-  console.log("Server runnign at http://localhost:5000");
+  console.log("Server runign at http://localhost:5000");
 });
