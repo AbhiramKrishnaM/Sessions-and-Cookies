@@ -15,7 +15,7 @@ router.post("/login", async (req, res) => {
 
     if (response.status === 200) {
       if (req.session.user) {
-        res.send(response.data);
+        res.send({ msg: "User is logged in" });
       } else {
         req.session.user = response.data.data;
         res.send(response.data);
