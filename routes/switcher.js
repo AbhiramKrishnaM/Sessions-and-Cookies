@@ -1,43 +1,17 @@
 const express = require("express");
 
-const { _getData, _postData } = require("../AxiosGetPost");
+const _postData = require("../AxiosPost");
 
 const router = express.Router();
-
-router.get("/*", async (req, res) => {
-  const _lastUrl = req.originalUrl;
-  const _apiToken = req.session.user.api_token;
-
-  //   switch
-  switch (_lastUrl) {
-    case "/api/get-user-details":
-      const response = await _postData(_lastUrl, _apiToken, {});
-      res.status(200).json(response);
-      break;
-    case y:
-      // code block
-      break;
-    default:
-    // code block
-  }
-});
 
 router.post("/*", async (req, res) => {
   const _lastUrl = req.originalUrl;
   const _apiToken = req.session.user.api_token;
 
-  //   switch
-  switch (_lastUrl) {
-    case "/api/get-user-details":
-      const response = await _postData(_lastUrl, _apiToken, {});
-      res.status(200).json(response);
-      break;
-    case y:
-      // code block
-      break;
-    default:
-    // code block
-  }
+  const _form = { ...req.body };
+
+  const response = await _postData(_lastUrl, _apiToken, _form);
+  res.status(200).json(response);
 });
 
 module.exports = router;
