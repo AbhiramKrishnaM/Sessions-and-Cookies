@@ -22,9 +22,15 @@ router.post("/create", async (req, res) => {
     passphrase: walletPassphrase,
   };
 
-  const wallet = await bitgo.coin(coin).wallets().generateWallet(walletOptions);
-
-  res.status(200).send(wallet.wallet);
+  try {
+    const wallet = await bitgo
+      .coin(coin)
+      .wallets()
+      .generateWallet(walletOptions);
+    res.status(200).send(wallet.wallet);
+  } catch (err) {
+    res.status(403).json(err);
+  }
 });
 
 router.post("/get-balance", async (req, res) => {
@@ -35,9 +41,12 @@ router.post("/get-balance", async (req, res) => {
 
   bitgo.authenticateWithAccessToken({ accessToken });
 
-  const wallet = await bitgo.coin(coin).wallets().get({ id: walletId });
-
-  res.status(200).send(wallet.balanceString());
+  try {
+    const wallet = await bitgo.coin(coin).wallets().get({ id: walletId });
+    res.status(200).json(wallet.balance());
+  } catch (err) {
+    res.status(403).json(err);
+  }
 });
 
 module.exports = router;
