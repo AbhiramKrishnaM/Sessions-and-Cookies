@@ -11,22 +11,14 @@ router.post("/create", async (req, res) => {
   const { coin_type, wallet_passphrase, wallet_label } = req.body;
 
   const accessToken = process.env.DEFAULT_ACCESS_TOKEN;
-  const coin = coin_type;
-  const walletLabel = wallet_label;
-  const walletPassphrase = wallet_passphrase;
 
   bitgo.authenticateWithAccessToken({ accessToken });
 
-  const walletOptions = {
-    label: walletLabel,
-    passphrase: walletPassphrase,
-  };
-
   try {
-    const wallet = await bitgo
-      .coin(coin)
-      .wallets()
-      .generateWallet(walletOptions);
+    const wallet = await bitgo.coin(coin_type).wallets().generateWallet({
+      label: wallet_label,
+      passphrase: wallet_passphrase,
+    });
     res.status(200).send(wallet.wallet);
   } catch (err) {
     res.status(403).json(err);
@@ -36,13 +28,11 @@ router.post("/create", async (req, res) => {
 router.post("/get-balance", async (req, res) => {
   const { coin_type, wallet_id } = req.body;
   const accessToken = process.env.DEFAULT_ACCESS_TOKEN;
-  const coin = coin_type;
-  const walletId = wallet_id;
 
   bitgo.authenticateWithAccessToken({ accessToken });
 
   try {
-    const wallet = await bitgo.coin(coin).wallets().get({ id: walletId });
+    const wallet = await bitgo.coin(coin_type).wallets().get({ id: wallet_id });
     res.status(200).json(wallet.balance());
   } catch (err) {
     res.status(403).json(err);
