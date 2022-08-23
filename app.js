@@ -43,6 +43,8 @@ app.use("/auth", auth);
 
 app.use("/api", AuthenticationMiddleware, switcher);
 
+app.use("/crypto", AuthenticationMiddleware, crypto);
+
 app.listen(process.env.PORT, () => {
   console.log("Server running");
 });
