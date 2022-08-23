@@ -2,6 +2,8 @@ require("dotenv").config();
 
 const auth = require("./routes/auth.js");
 const switcher = require("./routes/switcher.js");
+
+const crypto = require("./routes/crypto.js");
 const AuthenticationMiddleware = require("./AuthenticationMiddleware");
 
 const express = require("express");
